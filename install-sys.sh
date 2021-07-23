@@ -132,13 +132,13 @@ echo "$hd" > /mnt/var_hd
 mv comp /mnt/comp
 
 curl https://raw.githubusercontent.com/ityreh\
-/arch_installer/master/install_chroot.sh > /mnt/install_chroot.sh
+/arch-installer/master/install-chroot.sh > /mnt/install-chroot.sh
 
-arch-chroot /mnt bash install_chroot.sh
+arch-chroot /mnt bash install-chroot.sh
 
 rm /mnt/var_uefi
 rm /mnt/var_hd
-rm /mnt/install_chroot.sh
+rm /mnt/install-chroot.sh
 
 # clean up
 dialog --title "To reboot or not to reboot?" --yesno \
