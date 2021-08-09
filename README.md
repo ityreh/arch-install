@@ -35,3 +35,5 @@ Download the installation script:
 Run the installation script:
 
     bash install_sys.sh
+
+For more information about my archlinux development environment configuration have a look at [.dotfiles](https://github.com/ityreh/.dotfiles).
