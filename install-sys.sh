@@ -132,7 +132,7 @@ echo "$hd" > /mnt/var_hd
 mv comp /mnt/comp
 
 curl https://raw.githubusercontent.com/ityreh\
-/arch-installer/master/install-chroot.sh > /mnt/install-chroot.sh
+/arch-installer/main/install-chroot.sh > /mnt/install-chroot.sh
 
 arch-chroot /mnt bash install-chroot.sh
 

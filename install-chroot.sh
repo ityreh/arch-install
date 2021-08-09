@@ -40,7 +40,7 @@ function config_user() {
     else
         echo "$1" > name
     fi
-    
+
     dialog --no-cancel --passwordbox "Enter your password." \
         10 60 2> pass1
     dialog --no-cancel --passwordbox "Confirm your password." \
@@ -84,6 +84,6 @@ dialog --title "Continue installation" --yesno \
 "Do you want to install all your apps and your dotfiles?" \
 10 60 \
 && curl https://raw.githubusercontent.com/ityreh\
-/arch-installer/master/install-apps.sh > /tmp/install-apps.sh \
+/arch-installer/main/install-apps.sh > /tmp/install-apps.sh \
 && bash /tmp/install-apps.sh
 
