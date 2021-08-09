@@ -4,7 +4,7 @@ mkdir -p "/home/$(whoami)/Documents"
 mkdir -p "/home/$(whoami)/Downloads"
 
 # keyboard layout
-localectl --no-convert set-x11-keymap de
+localectl --no-convert set-x11-keymap de-latin1
 
 # installing packages from the AUR
 aur_install() {
