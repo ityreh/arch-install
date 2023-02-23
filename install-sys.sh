@@ -3,7 +3,7 @@
 # never run pacman -Sy on your system!
 pacman -Sy dialog
 
-# time
+# time (synchronize system clock with the network time protcol)
 timedatectl set-ntp true
 
 # greet and warn users
@@ -108,14 +108,15 @@ w
 EOF
 partprobe "$hd"
 
-# formatting partitions
+# formatting partition - swap
 mkswap "${hd}2"
 swapon "${hd}2"
 
-mkfs.ext4 "${hd}3"
+# formatting partition - root
+mkfs.btrfs "${hd}3"
 mount "${hd}3" /mnt
 
-# formatting partitions - case UEFI
+# formatting partition - case uefi
 if [ "$uefi" = 1 ]; then
     mkfs.fat -F32 "${hd}1"
     mkdir -p /mnt/boot/efi
@@ -132,7 +133,7 @@ echo "$hd" > /mnt/var_hd
 mv comp /mnt/comp
 
 curl https://raw.githubusercontent.com/ityreh\
-/arch-installer/main/install-chroot.sh > /mnt/install-chroot.sh
+/arch-install/main/install-chroot.sh > /mnt/install-chroot.sh
 
 arch-chroot /mnt bash install-chroot.sh
 

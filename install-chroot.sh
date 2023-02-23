@@ -84,6 +84,6 @@ dialog --title "Continue installation" --yesno \
 "Do you want to install all your apps and your dotfiles?" \
 10 60 \
 && curl https://raw.githubusercontent.com/ityreh\
-/arch-installer/main/install-apps.sh > /tmp/install-apps.sh \
+/arch-install/main/install-apps.sh > /tmp/install-apps.sh \
 && bash /tmp/install-apps.sh
 

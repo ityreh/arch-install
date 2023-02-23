@@ -30,7 +30,7 @@ After that you can exit iwctl and continue with the installation script.
 
 Download the installation script:
 
-    curl -LO https://raw.githubusercontent.com/ityreh/arch-installer/main/install_sys.sh
+    curl -LO https://raw.githubusercontent.com/ityreh/arch-install/main/install-sys.sh
 
 Run the installation script:
 

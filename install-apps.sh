@@ -3,7 +3,7 @@
 name=$(cat /tmp/main)
 
 apps_path="/tmp/apps.csv"
-curl https://raw.githubusercontent.com/ityreh/arch-installer/main/apps.csv > $apps_path
+curl https://raw.githubusercontent.com/ityreh/arch-install/main/apps.csv > $apps_path
 
 # choose groups of applications
 dialog --title "Welcome!" \
@@ -80,7 +80,7 @@ echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
 # invoke the next installer script
 curl https://raw.githubusercontent.com/ityreh \
-    /arch-installer/main/install-user.sh > /tmp/install-user.sh;
+    /arch-install/main/install-user.sh > /tmp/install-user.sh;
 
 # Switch user and run the final script
 sudo -u "$name" sh /tmp/install-user.sh
