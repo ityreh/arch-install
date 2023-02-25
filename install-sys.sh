@@ -119,8 +119,7 @@ mount "${hd}3" /mnt
 # formatting partition - case uefi
 if [ "$uefi" = 1 ]; then
     mkfs.fat -F32 "${hd}1"
-    mkdir -p /mnt/boot/efi
-    mount "${hd}1" /mnt/boot/efi
+    mount --mkdir "${hd}1" /mnt/boot/efi
 fi
 
 # install Arch Linux

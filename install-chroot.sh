@@ -13,8 +13,8 @@ pacman -S --noconfirm grub
 
 if [ "$uefi" = 1 ]; then
     pacman -S --noconfirm efibootmgr
-    grub-install --target=x86_64 -efi \
-        --bootloader -id=GRUB \
+    grub-install --target=x86_64-efi \
+        --bootloader-id=GRUB \
         --efi-directory=/boot/efi
 else
     grub-install "$hd"
