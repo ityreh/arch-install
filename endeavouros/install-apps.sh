@@ -1,9 +1,13 @@
 #!/bin/bash
 
-name=$(cat /tmp/main)
+# permission TODO: replace instead of append
+echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-apps_path="/tmp/apps.csv"
-curl https://raw.githubusercontent.com/ityreh/arch-install/main/apps.csv > $apps_path
+# update the system
+yay --noconfirm
+
+# install dialog
+yay --noconfirm -S dialog
 
 # choose groups of applications
 dialog --title "Welcome!" \
@@ -11,20 +15,7 @@ dialog --title "Welcome!" \
         !" \
     10 60
 
-apps=("essential" "Essentials" on
-    "network" "Network" on
-    "tools" "Nice tools to have (highly recommended)" on
-    "tmux" "Tmux" on
-    "notifier" "Notification tools" on
-    "git" "Git & git tools" on
-    "i3" "i3 wm" on
-    "zsh" "The Z-Shell (zsh)" on
-    "neovim" "Neovim" on
-    "urxvt" "URxvt" on
-    "firefox" "Firefox (browser)" off
-    "js" "JavaScript tooling" off
-    "qutebrowser" "Qutebrowser (browser)" off
-    "lynx" "Lynx (browser)" off)
+apps=("basic" "Basics" on)
 
 dialog --checklist \
     "You can now choose what group of application you want to install. \n\n\
@@ -41,9 +32,6 @@ count=$(echo "$lines" | wc -l)
 packages=$(echo "$lines" | awk -F, {'print $2'})
 
 echo "$selection" "$lines" "$count" >> "/tmp/packages"
-
-# update the system
-pacman -Syu --noconfirm
 
 # installing the packages
 rm -f /tmp/aur_queue
@@ -75,13 +63,9 @@ echo "$packages" | while read -r line; do
     fi
 done
 
-# permission
-echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
+# basics
 
-# invoke the next installer script
-curl https://raw.githubusercontent.com/ityreh \
-    /arch-install/main/install-user.sh > /tmp/install-user.sh;
-
-# Switch user and run the final script
-sudo -u "$name" sh /tmp/install-user.sh
-
+# git
+git config --global user.email "yr@ityreh.de"
+git config --global user.name "Yannick Rehberger"
+git config --global pull.rebase true
