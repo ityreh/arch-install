@@ -1,7 +1,12 @@
 #!/bin/bash
 
-# permission TODO: replace instead of append
-echo "%wheel ALL=(ALL:ALL) NOPASSWD: ALL" >> /etc/sudoers
+#TODO: add a dialog for this user specific fields
+name=$(whoami)
+git_email="yr@ityreh.de"
+git_name="Yannick Rehberger"
+
+apps_path="./apps.csv"
+#curl https://raw.githubusercontent.com/ityreh/arch-install/main/endeavouros/apps.csv > $apps_path
 
 # update the system
 yay --noconfirm
@@ -15,7 +20,11 @@ dialog --title "Welcome!" \
         !" \
     10 60
 
-apps=("basic" "Basics" on)
+apps=(
+    "basic" "Basics" on
+    "develop" "Develop" on
+    "develop-java" "Develop Java" on
+)
 
 dialog --checklist \
     "You can now choose what group of application you want to install. \n\n\
@@ -49,23 +58,35 @@ echo "$packages" | while read -r line; do
         "Downloading and installing program $c out of $count: $line..." \
         8 70
 
-    ((pacman --noconfirm --needed -S "$line" > /tmp/arch_install 2>&1) \
+    ((yay --noconfirm --needed -S "$line" > /tmp/arch_install 2>&1) \
         || echo "$line" >> /tmp/aur_queue) \
         || echo "$line" >> /tmp/arch_install_failed
-
-    if [ "$line" = "zsh" ]; then
-        # Set Zsh as default terminal for our user
-        chsh -s "$(which zsh)" "$name"
-    fi
-
-    if [ "$line" = "networkmanager" ]; then
-        systemctl enable NetworkManager.service
-    fi
 done
 
-# basics
+# setups for basic
+if [[ "$choices" == *"basic"* ]]; then
+  echo "User selected the 'basic' group."
 
-# git
-git config --global user.email "yr@ityreh.de"
-git config --global user.name "Yannick Rehberger"
-git config --global pull.rebase true
+  # Set Zsh as default terminal for our user
+  sudo chsh -s "$(which zsh)" "$name"
+fi
+
+# setups for develop
+if [[ "$choices" == *"develop"* ]]; then
+  echo "User selected the 'develop' group."
+
+  # git
+  git config --global user.email $git_email
+  git config --global user.name $git_name
+  git config --global pull.rebase true
+fi
+
+# setups for develop-java
+if [[ "$choices" == *"develop-java"* ]]; then
+  echo "User selected the 'develop-java' group."
+
+  # sdkman
+  curl -s "https://get.sdkman.io" | bash
+  source "/home/main/.sdkman/bin/sdkman-init.sh"
+  sdk install java
+fi
