@@ -1,0 +1,9 @@
+basic,base-devel,Basic tools to build Arch Linux packages
+basic,ttf-jetbrains-mono-nerd,JetBrains Mono Nerd Font
+basic,gtop,System monitoring dashboard
+basic,neofetch,A CLI system information tool
+basic,google-chrome,Google Chrome browser
+develop,git,Version control system
+develop,github-cli,GitHub CLI
+develop,visual-studio-code-bin,Visual Studio Code
+develop-java,maven,Java project management and project comprehension tool

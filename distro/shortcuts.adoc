@@ -1,0 +1,36 @@
+=== KDE Plasma
+
+[cols="1,2", options="header"]
+|===
+| Shortcut | Description
+
+| Ctrl + Alt + T
+| Open terminal
+
+| Meta + D
+| Show desktop
+
+| Alt + Space
+| Open KRunner
+
+| Meta + E
+| Open file manager (Dolphin)
+
+| Meta + Tab
+| Switch between open windows
+
+| Ctrl + Esc
+| Show system activity
+
+| Print Screen
+| Take screenshot
+
+| Meta + L
+| Lock screen
+
+| Alt + F2
+| Run command dialog
+
+| Meta + Shift + S
+| Start/stop screen recording (if available)
+|===
