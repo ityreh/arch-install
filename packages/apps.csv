@@ -1,0 +1,76 @@
+# Package catalog: category,source,package,description
+# source: R = official arch repos (pacman), A = AUR (queued for the AUR helper)
+# Blank lines and lines starting with # are ignored.
+
+# --- essentials ----------------------------------------------------------
+essential,R,xorg,X Server
+essential,R,xorg-xinit,Display server boot
+essential,R,man,Manual
+essential,R,man-pages,Manual pages
+
+# --- network ---------------------------------------------------------------
+network,R,openssh,Remote login tool for SSH protocol
+network,R,networkmanager,Network manager
+
+# --- tools -----------------------------------------------------------------
+tools,R,rsync,Synchronizing files across computers
+tools,R,arandr,xrandr GUI
+tools,R,xsel,Manipulate the X selection
+tools,R,fzf,Command line fuzzy finder
+tools,R,scrot,Screenshot software
+tools,R,udiskie,Automount devices
+tools,R,lxappearance,Theme switcher for GTK+
+tools,R,xcape,Configure modifier keys to act as other keys
+tools,R,ripgrep,Faster alternative to grep
+tools,R,htop,Interactive process viewer
+tools,R,neofetch,System info printed at shell startup
+tools,A,gtop,System monitoring dashboard
+
+# --- tmux -----------------------------------------------------------------
+tmux,R,tmux,Terminal multiplexer
+tmux,R,tmuxp,Configure tmux session + windows + panes via config files
+
+# --- notifier --------------------------------------------------------------
+notifier,R,dunst,Notification system
+notifier,R,libnotify,Notifier
+
+# --- git ---------------------------------------------------------------------
+git,R,git,Version control system
+git,R,diff-so-fancy,Human readable git diff
+
+# --- i3 window manager --------------------------------------------------------
+i3,R,i3-wm,i3 window tile manager
+i3,R,i3status,i3 status bar
+i3,R,i3lock,i3 lock monitor
+i3,R,dmenu,Dynamic menu for X
+i3,R,feh,X11 image viewer
+i3,R,arc-gtk-theme,Desktop themes
+
+# --- zsh ---------------------------------------------------------------------
+zsh,R,zsh,Unix shell (Z-Shell)
+zsh,R,zsh-completions,Additional completions for Zsh
+zsh,R,zsh-syntax-highlighting,Syntax highlighting for ZSH
+
+# --- neovim ---------------------------------------------------------------------
+neovim,R,neovim,Editor ... and much more
+
+# --- urxvt --------------------------------------------------------------------
+urxvt,R,rxvt-unicode,Terminal Urxvt
+urxvt,A,urxvt-tabbedex,Improved tabs for Urxvt
+
+# --- js -----------------------------------------------------------------------
+js,R,nodejs,Nodejs
+js,R,yarn,Dependency manager
+
+# --- browsers ------------------------------------------------------------------
+browsers,R,firefox,Browser Firefox
+browsers,R,qutebrowser,Qutebrowser
+browsers,R,lynx,Text-based browser
+browsers,A,google-chrome,Chrome browser
+
+# --- development -----------------------------------------------------------------
+develop,R,base-devel,Base development tools
+develop,R,github-cli,GitHub command line interface
+develop,R,maven,Java build tool
+develop,A,visual-studio-code-bin,Visual Studio Code
+develop,A,ttf-jetbrains-mono-nerd,JetBrains Mono Nerd Font

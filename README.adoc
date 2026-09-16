@@ -1,45 +1,70 @@
 = arch-install
 
-This is an automated setup of my personal archlinux environment. Please use the sources here only to get inspiration and take them into your own setup instead of running the scripts as they are on your system, because they are tailored to me. If you want to automate the setup of your own environment, I highly recommend the book by https://github.com/Phantas0s[Matthieu Cneude] called https://themouseless.dev/[Building your Mouseless Development Environment] for automating vanilla setup and some explanations or just use a https://distrowatch.com/[distro] that matches your requirements. Of course, the https://wiki.archlinux.org/title/Main_page[Arch Wiki] is also a great resource.
+Automated installer for a personal vanilla Arch Linux environment.
+Tailored to one author's workflow; use the https://wiki.archlinux.org/title/Installation_guide[Arch Wiki] as the authoritative reference.
 
-== Vanilla Installation
+== Quick start
 
-I am not really maintaining the vanilla installation anymore but I keep it as an example.
+Prepare an https://archlinux.org/download/[Arch Linux live USB] and boot from it.
 
-Prepare an https://archlinux.org/download/[Arch Linux live system] (e.g. on an USB stick) and boot your system from it. If you do not have an US keyboard layout you can load the right keybindings with `loadkeys <country code>` to enter the first commands more easily. I have a german keyboard layout:
+=== 1. Set your keyboard layout (German)
 
     loadkeys de-latin1
 
-If you are connected to the internet via cable, you can skip to 'Download the installation script'. Otherwise you have to connect to the internet manually to be able to download the installation script. Enter `iwctl` to scan and connect to a WiFi network:
+=== 2. Connect to Wi-Fi (if needed)
 
     iwctl
 
-List the available devices:
+    station device list
+    station device connect "NetworkName"
 
-    [iwd]# device list
+=== 3. Download and run the installer
 
-Choose a device and get the available networks:
+    curl -LO https://raw.githubusercontent.com/ityreh/arch-install/main/bin/arch-install.sh
+    bash arch-install.sh
 
-    [iwd]# station <device> get-networks
+To pass options:
 
-Choose a network and connect to it. Enter the password if necessary:
+    bash arch-install.sh --disk /dev/nvme0n1 --swap 8G
 
-    [iwd]# station <device> connect "<network>"
+== Structure
 
-After that you can exit iwctl and continue with the installation script.
+    .
+    ├── config/
+    │   └── settings.sh      # Single source of truth (hostname, locale, git identity...)
+    ├── packages/
+    │   └── apps.csv         # Package catalog: category,source(R/A),package,description
+    ├── bin/
+    │   ├── arch-install.sh  # Entry point: runs phases 10 → 20 → 30 → 40 → 50
+    │   ├── 10-partition.sh  # Phase 1: wipe, partition, format, mount
+    │   ├── 20-bootstrap.sh  # Phase 2: pacstrap, fstab, copy repo into target
+    │   ├── 30-chroot.sh     # Phase 3: bootloader, locale, users (inside chroot)
+    │   ├── 40-packages.sh   # Phase 4: dialog package selection + pacman install
+    │   ├── 50-user.sh       # Phase 5: AUR helper, git identity, dotfiles
+    │   └── lib/
+    │       └── common.sh    # Shared helpers, dialog wrappers, state management
+    ├── Makefile
+    └── AGENTS.md
 
-    [iwd]# exit
+=== Pipeline
 
-Download the installation script:
+1. **10-partition** (live USB, root) — interactive prompts for disk, wipe method, swap; writes runtime state to `/var/lib/arch-install/state.env`
+2. **20-bootstrap** (live USB, root) — pacstrap base packages, generate fstab, copy this repo to `/opt/arch-install` on the target
+3. **30-chroot** (inside `arch-chroot /mnt`) — bootloader, locale, hostname, root + user passwords; chains to 40 and 50
+4. **40-packages** (root) — checklist of app groups from `packages/apps.csv`; pacman installs, AUR failures queued
+5. **50-user** (as target user) — AUR helper bootstrap, AUR queue install, git identity, dotfiles clone
 
-    curl -LO https://raw.githubusercontent.com/ityreh/arch-install/main/vanilla/install-sys.sh && bash install_sys.sh
+After the first reboot, re-run phases 40/50 standalone if needed:
 
-== Distro Installation
+    sudo /opt/arch-install/bin/40-packages.sh      # as root
+    bash /opt/arch-install/bin/50-user.sh            # as user
 
-Instead of installing vanilla Arch you can use a distro of your choice that is based on Arch. The most distro installer are easy to use and you can choose between multiple desktop environments.
+== Development
 
-Because the distro installation is doing the system setup, we can just install our apps right after it:
+Lint all scripts (requires https://github.com/koalaman/shellcheck[shellcheck]):
 
-    curl -LO https://raw.githubusercontent.com/ityreh/arch-install/main/<distro>/install-apps.sh && bash install-apps.sh
+    make check
 
-> For more information about my configuration have a look at https://github.com/ityreh/.dotfiles[.dotfiles].
+List the package catalog:
+
+    make list
