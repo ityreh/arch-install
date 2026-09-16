@@ -13,7 +13,8 @@ state_load
 
 TARGET_USER="${TARGET_USER:-$USER_DEFAULT}"
 CSV="${ARCH_INSTALL_DIR:-$REPO_DIR}/packages/apps.csv"
-AUR_QUEUE_FILE="$ARCH_INSTALL_DIR/.aur_queue"
+AUR_QUEUE_FILE="$STATE_DIR/.aur_queue"
+PKG_LIST_FILE="$STATE_DIR/.pkg_list"
 
 # --- build checklist from CSV --------------------------------------------------
 IFS=$'\n' read -d '' -r CATEGORIES <<< "$(parse_categories "$CSV")"
@@ -29,9 +30,9 @@ for cat in $CATEGORIES; do
     CHECKLIST+=("$cat" "" "$state_on")
 done
 
-Choices=$(dialog --checklist \
+Choices=$(checklist \
     "Choose which app groups to install. SPACE selects, ENTER confirms." \
-    0 0 0 "${CHECKLIST[@]}" 2>/dev/null) || die "Aborted"
+    0 0 0 "${CHECKLIST[@]}")
 
 log "Selected groups: $Choices"
 
@@ -41,9 +42,9 @@ count=0
 while IFS= read -r line; do
     count=$((count + 1))
     awk -F, -v c="$line" '$1==c && NF && !/^#/ { print $2 }' "$CSV"
-done <<< "$Choices" | sort -u > "$ARCH_INSTALL_DIR/.pkg_list"
+done <<< "$Choices" | sort -u > "$PKG_LIST_FILE"
 
-total=$(wc -l < "$ARCH_INSTALL_DIR/.pkg_list")
+total=$(wc -l < "$PKG_LIST_FILE")
 pkg_num=0
 
 while IFS= read -r pkg; do
@@ -70,12 +71,12 @@ while IFS= read -r pkg; do
             log "NetworkManager enabled"
             ;;
     esac
-done < "$ARCH_INSTALL_DIR/.pkg_list"
+done < "$PKG_LIST_FILE"
 
 # ensure wheel group has sudo
 grep -q "^%wheel" /etc/sudoers 2>/dev/null || echo "%wheel ALL=(ALL) ALL" >> /etc/sudoers
 
-rm -f "$ARCH_INSTALL_DIR/.pkg_list"
+rm -f "$PKG_LIST_FILE"
 
 # --- post-install: enable system services --------------------------------------
 for svc in "${SYSTEMD_SERVICES[@]}"; do

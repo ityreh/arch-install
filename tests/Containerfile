@@ -1,0 +1,23 @@
+# Test container: a fresh Arch Linux system comparable to a just-installed target.
+# The repo is NOT copied here — it is mounted read-only at /opt/arch-install by
+# tests/run-pod.sh, matching ARCH_INSTALL_DIR in config/settings.sh.
+#
+#   podman build -t arch-install-test -f tests/Containerfile .
+
+FROM archlinux:latest
+
+RUN pacman --noconfirm -Syu \
+    && pacman --noconfirm -S --needed \
+        base-devel \
+        dialog \
+        fakeroot \
+        git \
+        sudo
+
+# A non-root test user, mirroring what 30-chroot creates on real hardware.
+RUN useradd -m -g wheel tester \
+    && echo "tester ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+WORKDIR /opt/arch-install
+
+CMD ["/bin/bash"]

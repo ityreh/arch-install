@@ -12,9 +12,10 @@ source "$(dirname "$0")/lib/common.sh"
 state_load
 
 TARGET_USER="${TARGET_USER:-$USER_DEFAULT}"
-AUR_QUEUE="$ARCH_INSTALL_DIR/.aur_queue"
 DOTFILES="$HOME/dotfiles"
 ARCH_INSTALL_DIR="${ARCH_INSTALL_DIR:-/opt/arch-install}"
+STATE_DIR="${STATE_DIR:-/var/lib/arch-install}"
+AUR_QUEUE="$STATE_DIR/.aur_queue"
 
 # --- keymap ------------------------------------------------------------------
 if command -v localectl >/dev/null; then

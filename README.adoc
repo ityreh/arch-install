@@ -65,6 +65,11 @@ Lint all scripts (requires https://github.com/koalaman/shellcheck[shellcheck]):
 
     make check
 
+Run the smoke tests against a podman archlinux pod (no real hardware needed):
+
+    make test            # quick checks
+    make test-full       # also installs a few packages (requires root)
+
 List the package catalog:
 
     make list

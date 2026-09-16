@@ -20,7 +20,7 @@ BIN_DIR    := $(REPO_DIR)/bin
 
 .DEFAULT_GOAL := help
 
-.PHONY: help install packages user check list
+.PHONY: help install packages user check list test test-full
 
 help: ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*?## ' $(MAKEFILE_LIST) | \
@@ -39,7 +39,7 @@ user: ## Re-run user-level setup (as normal user, after first boot)
 
 check: ## Syntax-check all scripts
 	@echo "Running bash -n ..."
-	@for f in "$(BIN_DIR)"/*.sh "$(BIN_DIR)"/lib/*.sh; do \
+	@for f in "$(BIN_DIR)"/*.sh "$(BIN_DIR)"/lib/*.sh config/settings.sh; do \
 		bash -n "$$f" || exit 1; \
 	done
 	@command -v shellcheck >/dev/null 2>&1 && \
@@ -50,3 +50,13 @@ check: ## Syntax-check all scripts
 
 list: ## Print the package catalog
 	@column -t -s, "$(REPO_DIR)/packages/apps.csv" | grep -v '^\s*#'
+
+test: ## Build pod + run quick smoke tests in the arch container
+	@bash tests/run-pod.sh
+	@podman exec -it arch-install-test \
+		bash /opt/arch-install/tests/manual-test.sh
+
+test-full: ## Build pod + run smoke tests including 40/50 (installs packages)
+	@bash tests/run-pod.sh
+	@podman exec -it arch-install-test \
+		bash /opt/arch-install/tests/manual-test.sh --full

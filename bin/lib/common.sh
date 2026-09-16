@@ -115,6 +115,18 @@ menu() {
     printf '%s' "$value"
 }
 
+# --checklist <title> <height> <width> <list-height> <item> <desc> <on/off> [...]
+# echoes the space-separated selected items on stdout.
+checklist() {
+    local out; out=$(mktemp)
+    if ! "$DIALOG" --checklist "$1" "$2" "$3" "$4" "${@:5}" 2>"$out"; then
+        rm -f "$out"
+        die "Aborted"
+    fi
+    local value; value=$(<"$out"); rm -f "$out"
+    printf '%s' "$value"
+}
+
 # --- helpers ----------------------------------------------------------------
 
 # Fetch the Arch Linux package list from the repo's catalog.

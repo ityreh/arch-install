@@ -27,17 +27,25 @@ Personal vanilla Arch Linux installer. Five-phase pipeline orchestrated by
 
 ```sh
 make check          # bash -n + shellcheck (if installed)
-shellcheck bin/*.sh bin/lib/*.sh   # manual
+bash tests/manual-test.sh        # quick smoke tests, no root needed
+make test           # requires podman: spins up archlinux pod, runs smoke tests
+make test-full      # same, but also runs 40/50 for real (installs packages)
 ```
 
-All scripts must pass `bash -n` before any commit.
+All scripts must pass `bash -n` before any commit. Smoke tests use
+`tests/fake-dialog.sh` (honors `$DIALOG` from `common.sh`) so they run
+headless. Interactive phases 10/20 (partitioning, pacstrap) are **not**
+covered — they need real hardware or QEMU.
 
 ## Roadmap
 
-Current state: first full rewrite, not yet tested on real hardware.
+Current state: rewritten into a 5-phase pipeline, unit-tested in a podman
+archlinux pod, not yet run end-to-end on real hardware.
 
+- [x] Restructure: phased `bin/` pipeline, config-driven settings
+- [x] Podman test pod: `tests/{Containerfile,run-pod.sh,manual-test.sh}`
 - [ ] Dry-run / auto mode (skip dialogs, use defaults from settings)
-- [ ] NVMe / mmcblk partition-number detection in 10-partition
+- [ ] Point 40/50 at the container's own pacman (validated; verify yay/AUR repackaging in pod)
 - [ ] GRUB defaults: theme, timeout
 - [ ] Post-install hooks per category (e.g. zsh shell, services)
 - [ ] End-to-end test harness (QEMU or VM snapshot)
