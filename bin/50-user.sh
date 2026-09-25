@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# bin/50-user.sh — user-level setup: keymap, AUR helper, git identity, dotfiles.
+# bin/50-user.sh — user-level setup: keymap, AUR helper, git identity, dotfiles, user tools.
 # Must run as the target user (sudo -u or after reboot).
 #
 #   Usage: 50-user.sh
@@ -97,5 +97,32 @@ log "Stowing dotfiles into $HOME from $DOTFILES"
     cd "$DOTFILES"
     ./setup.sh
 )
+
+# --- user tools -----------------------------------------------------------------
+if command -v cargo >/dev/null; then
+    for tool in "${CARGO_TOOLS[@]}"; do
+        if command -v "$tool" >/dev/null; then
+            log "$tool already installed"
+        elif cargo install "$tool"; then
+            log "$tool installed via cargo"
+        else
+            log "WARN: $tool failed to install via cargo"
+        fi
+    done
+else
+    log "WARN: cargo not found, skipping: ${CARGO_TOOLS[*]}"
+fi
+
+if [[ ! -f "$HOME/.local/share/$BLE_SH_DIR/ble.sh" ]]; then
+    log "Fetching ble.sh $BLE_SH_TAG"
+    mkdir -p "$HOME/.local/share"
+    if curl -fsSL "$BLE_SH_URL" | tar -xJ -C "$HOME/.local/share"; then
+        log "ble.sh installed to $HOME/.local/share/$BLE_SH_DIR"
+    else
+        log "WARN: ble.sh download failed"
+    fi
+else
+    log "ble.sh already installed"
+fi
 
 log "50-user done. Everything installed. Enjoy!"

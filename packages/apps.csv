@@ -25,6 +25,9 @@ tools,R,xcape,Configure modifier keys to act as other keys
 tools,R,ripgrep,Faster alternative to grep
 tools,R,htop,Interactive process viewer
 tools,R,neofetch,System info printed at shell startup
+tools,R,eza,Modern replacement for ls
+tools,R,bat,Cat clone with syntax highlighting
+tools,R,vivid,Syntax-highlighting pager
 tools,A,gtop,System monitoring dashboard
 
 # --- tmux -----------------------------------------------------------------
@@ -72,6 +75,8 @@ browsers,A,google-chrome,Chrome browser
 # --- development -----------------------------------------------------------------
 develop,R,base-devel,Base development tools
 develop,R,github-cli,GitHub command line interface
+develop,R,rust,Rust toolchain providing cargo
+develop,R,shellcheck,Shell script linter
 develop,R,maven,Java build tool
 develop,A,visual-studio-code-bin,Visual Studio Code
 develop,A,ttf-jetbrains-mono-nerd,JetBrains Mono Nerd Font

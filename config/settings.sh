@@ -26,6 +26,13 @@ DOTFILES_BRANCH=mouseless
 GIT_NAME="Yannick Rehberger"
 GIT_EMAIL=yr@ityreh.de
 
+# --- user tools ------------------------------------------------------------------
+# Cargo-installed binaries land in ~/.cargo/bin, ble.sh path is referenced by .bashrc.
+CARGO_TOOLS=(workmux starship)
+BLE_SH_TAG=v0.4.0-devel3
+BLE_SH_DIR=ble-0.4.0-devel3
+BLE_SH_URL="https://github.com/akinomyoga/ble.sh/releases/download/${BLE_SH_TAG}/${BLE_SH_DIR}.tar.xz"
+
 # --- packages ----------------------------------------------------------------
 AUR_HELPER=yay
 # Categories pre-selected in the 40-packages dialog checklist.

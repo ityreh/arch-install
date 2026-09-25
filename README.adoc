@@ -18,14 +18,18 @@ Prepare an https://archlinux.org/download/[Arch Linux live USB] and boot from it
     station device list
     station device connect "NetworkName"
 
-=== 3. Download and run the installer
+=== 3. Clone and run the installer
 
-    curl -LO https://raw.githubusercontent.com/ityreh/arch-install/main/bin/arch-install.sh
-    bash arch-install.sh
+    git clone https://github.com/ityreh/arch-install.git
+    cd arch-install
+    bash bin/arch-install.sh
 
-To pass options:
+The full repository is required: the entry point sources `bin/lib/common.sh`,
+reads `config/settings.sh` and copies the repository into the target in phase 2.
 
-    bash arch-install.sh --disk /dev/nvme0n1 --swap 8G
+To pass options (forwarded to phase 1):
+
+    bash bin/arch-install.sh --disk /dev/nvme0n1 --swap 8G
 
 == Structure
 
@@ -40,7 +44,7 @@ To pass options:
     │   ├── 20-bootstrap.sh  # Phase 2: pacstrap, fstab, copy repo into target
     │   ├── 30-chroot.sh     # Phase 3: bootloader, locale, users (inside chroot)
     │   ├── 40-packages.sh   # Phase 4: dialog package selection + pacman install
-    │   ├── 50-user.sh       # Phase 5: AUR helper, git identity, dotfiles
+    │   ├── 50-user.sh       # Phase 5: AUR helper, git identity, dotfiles, user tools
     │   └── lib/
     │       └── common.sh    # Shared helpers, dialog wrappers, state management
     ├── Makefile
@@ -52,7 +56,7 @@ To pass options:
 2. **20-bootstrap** (live USB, root) — pacstrap base packages, generate fstab, copy this repo to `/opt/arch-install` on the target
 3. **30-chroot** (inside `arch-chroot /mnt`) — bootloader, locale, hostname, root + user passwords; chains to 40 and 50
 4. **40-packages** (root) — checklist of app groups from `packages/apps.csv`; pacman installs, AUR failures queued
-5. **50-user** (as target user) — AUR helper bootstrap, AUR queue install, git identity, dotfiles clone
+5. **50-user** (as target user) — AUR helper bootstrap, AUR queue install, git identity, dotfiles clone + stow, cargo tools (workmux, starship), ble.sh
 
 After the first reboot, re-run phases 40/50 standalone if needed:
 

@@ -20,7 +20,7 @@ fi
 msgbox "Arch Linux installer — this will guide you through the full setup."
 
 log "Phase 1: partitioning"
-"$BIN_DIR/10-partition.sh"
+"$BIN_DIR/10-partition.sh" "$@"
 
 log "Phase 2: bootstrap"
 "$BIN_DIR/20-bootstrap.sh"
