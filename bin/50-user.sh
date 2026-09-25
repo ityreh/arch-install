@@ -12,7 +12,7 @@ source "$(dirname "$0")/lib/common.sh"
 state_load
 
 TARGET_USER="${TARGET_USER:-$USER_DEFAULT}"
-DOTFILES="$HOME/dotfiles"
+DOTFILES="$HOME/code/ws/dotfiles"
 ARCH_INSTALL_DIR="${ARCH_INSTALL_DIR:-/opt/arch-install}"
 STATE_DIR="${STATE_DIR:-/var/lib/arch-install}"
 AUR_QUEUE="$STATE_DIR/.aur_queue"
@@ -78,19 +78,24 @@ fi
 
 # --- dotfiles -----------------------------------------------------------------
 if [[ ! -d "$DOTFILES" ]]; then
-    log "Cloning dotfiles from $DOTFILES_REPO"
-    git clone "$DOTFILES_REPO" "$DOTFILES"
+    log "Cloning dotfiles from $DOTFILES_REPO (branch $DOTFILES_BRANCH)"
+    mkdir -p "$(dirname "$DOTFILES")"
+    git clone --branch "$DOTFILES_BRANCH" "$DOTFILES_REPO" "$DOTFILES"
 fi
 
-if [[ -f "$DOTFILES/install.sh" ]]; then
-    log "Running dotfiles installer"
-    (
-        cd "$DOTFILES"
-        bash install.sh
-    )
-elif [[ -f "$DOTFILES/.zshenv" ]]; then
-    log "Sourcing .zshenv from dotfiles"
-    source "$DOTFILES/.zshenv"
-fi
+command -v stow >/dev/null || die "stow is required to install the dotfiles (sudo pacman -S stow)"
+
+for f in .bashrc .bash_profile .blerc .gitconfig; do
+    if [[ -f "$HOME/$f" && ! -L "$HOME/$f" ]]; then
+        mv "$HOME/$f" "$HOME/$f.pre-dotfiles"
+        log "Moved existing ~/$f aside for stow"
+    fi
+done
+
+log "Stowing dotfiles into $HOME from $DOTFILES"
+(
+    cd "$DOTFILES"
+    ./setup.sh
+)
 
 log "50-user done. Everything installed. Enjoy!"

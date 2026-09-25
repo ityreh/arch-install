@@ -17,6 +17,7 @@ tools,R,rsync,Synchronizing files across computers
 tools,R,arandr,xrandr GUI
 tools,R,xsel,Manipulate the X selection
 tools,R,fzf,Command line fuzzy finder
+tools,R,stow,GNU stow symlink farm manager for dotfiles
 tools,R,scrot,Screenshot software
 tools,R,udiskie,Automount devices
 tools,R,lxappearance,Theme switcher for GTK+

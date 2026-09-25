@@ -21,7 +21,8 @@ ROOT_FS=btrfs
 
 # --- user -------------------------------------------------------------------
 USER_DEFAULT=main
-DOTFILES_REPO=https://github.com/ityreh/.dotfiles
+DOTFILES_REPO=https://github.com/ityreh/dotfiles
+DOTFILES_BRANCH=mouseless
 GIT_NAME="Yannick Rehberger"
 GIT_EMAIL=yr@ityreh.de
 
